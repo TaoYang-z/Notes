@@ -17,10 +17,12 @@ git分为：
 				这一步搞定，暂存区就空了，也创造了一个成功的分支；
 				后面的就是把这个分支上传到远程仓库GitHub
 	远程仓库；
+		首先要配置ssh
 		先在GitHub上创建一个repository，这时候这个仓库是空的，假如我在GitHub上创建了一个新仓库learngit
 		现在让本地的版本库和远程的关联起来就用下面这条命令
 		git remote add origin git@github.com:ytustc/learngit.git
 		origin就是远程库的名字
+		也可以用git remote add origin https://GitHub.com/ytustc/learngit.git 这就需要验证了
 		
 		下面把本地版本库的所有内容推送到远程库上
 		git push -u origin master //master是版本库的分支名字
@@ -28,6 +30,8 @@ git分为：
 		这是第一次将本地版本库master和远程库master合并，以后要更新远程库，只需要
 		git push origin master 即可
 		git clone可以下载远程库
+		git remote 显示远程仓库
+		git remote rm origin 删除远程仓库关联
 		
 
 其它命令：

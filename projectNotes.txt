@@ -1,0 +1,126 @@
+
+记录
+
+1051  make NOFORTRAN=1 NUM_THREADS=1 -j8
+
+make TEST_BLAS=/home/jjsu/openblas/OpenBLAS-develop/libopenblas_cortexa53-r0.3.7.dev.a ARCH=ARM64 NUMTHREADS=1 L2SIZE=4194304
+
+
+
+make TEST_BLAS=../installDir/lib/libopenblas_cortexa53-r0.3.7.dev.a ARCH=ARM64 NUMTHREADS=1 L2SIZE=4194304 -j8
+
+测试结果的单位为 MFlops，即每秒执行多少百万浮点数指令。测试中，LEVEL1 函数输入向量维度为50000000，LEVEL2 输入矩阵是 10000x10000 的方阵，KL、KU设定为1000，LEVEL3 输入矩阵规模为 3000x3000的方阵。本次测试结果都是单核运行。
+
+查找方法：
+eg：查找当前目录下的含有GEMV_N的文件
+find . -type f | xargs grep GEMV_N
+
+
+debug模式编译命令
+make NUM_THREADS=1 -j8 DEBUG=1
+普通模式编译命令
+make NUM_THREADS=1 -j8
+
+make install PREFIX=../testInstallDir
+git clone http://github.com/xianyi/blas-tester
+make TEST_BLAS=../testInstallDir/lib/libopenblas.a ARCH=ARM64 NUMTHREADS=1 L2SIZE=4194304 -j8 DEBUG=1
+
+测试用例
+https://www.cnblogs.com/chay/p/10272949.html
+gcc test2.c  -I installDir/include/ -L installDir/lib/ -lopenblas
+
+gcc -E -o amax.i amax.c
+as -o amax.o amax.i
+gcc -c main.c 
+gcc -g -o main main.o amax.o
+
+可以查看宏的编译
+gcc -g -gdwarf-2 -g3 -E -o  gemv.i gemv.c
+as  -g -gdwarf-2 -g3 -o gemv.o gemv.i
+gcc -g -gdwarf-2 -g3 -c  main.c
+gcc -g -gdwarf-2 -g3 -o main main.o gemv.o
+
+
+
+rm amax.o amax.i main  main.c~ main.o
+
+
+ld1 {v1.4s, v2.4s}, [X], #32    // Load [X3, X2, X1, X0]
+fabs    v1.4s, v1.4s            // ABS() each value
+fabs    v2.4s, v2.4s            // ABS() each value
+fadd    v1.4s, v1.4s, v2.4s     // [X3+X1, X2+X0]
+fadd    v0.4s, v0.4s, v1.4s     // [X3+X1, X2+X0]
+
+测试开头
+.text
+.align 5
+.global amax
+
+amax:
+
+
+#define test_gemv(      TA,      M, N,         al, A, lA, X, iX, be, Y, iY)  
+Mjoin( AP2, gemv )(    TA,      M, N,         al, A, lA, X, iX, be, Y, iY)
+
+	cc -c -O2 -DMAX_STACK_ALLOC=2048 -Wall -DF_INTERFACE_GFORT -fPIC -DNO_WARMUP -DMAX_CPU_NUMBER=1 -DMAX_PARALLEL_NUMBER=1 -DVERSION=\"0.3.6\" -march=armv8-a -mtune=cortex-a53 -DASMNAME=dtrsm_LTLN -DASMFNAME=dtrsm_LTLN_ -DNAME=dtrsm_LTLN_ -DCNAME=dtrsm_LTLN -DCHAR_NAME=\"dtrsm_LTLN_\" -DCHAR_CNAME=\"dtrsm_LTLN\" -DNO_AFFINITY -I../.. -DDOUBLE  -UCOMPLEX -UCOMPLEX -DDOUBLE -DTRANSA -UUPPER -UUNIT trsm_L.c -o dtrsm_LTLN.o
+
+
+
+
+
+
+	环境：
+	source /etc/profile.d/modules.sh
+	export MODULEPATH=$MODULEPATH:/opt/arm/modulefiles/
+	module avail
+	module load Generic-AArch64/Ubuntu/16.04/arm-instruction-emulator/19.2
+	编译：
+	gcc -o3 -march=armv8-a+sve example.c -o examcple
+	执行：
+	armie -msve-vector-bits=128 -i libinscount_emulated.so -- ./x
+
+
+
+	W	32		bitS
+	X	64		bit
+	V	128		bit
+	Q	128		bit
+	D	64		bit
+	S	32		bit
+	H	16		bit
+	B	8		bit
+
+
+
+
+	\nr 选择head.c，输入下面这段文字
+
+	函数名:  axpy
+	说明:
+	参数:
+	N:
+A:
+X:
+INCX:
+Y:
+INCY:
+返回值:
+备注:
+
+
+blastester运行过程
+main > runcases > 
+
+
+syr	(	character	UPLO,
+		integer	N,
+		real	ALPHA,
+		real, dimension(*)		X,
+		integer	INCX,
+		real, dimension(lda,*)		A,
+		integer	LDA 
+	)	
+	int CNAME(BLASLONG m, FLOAT alpha_r,
+			FLOAT *x, BLASLONG incx, FLOAT *a, BLASLONG lda, FLOAT *buffer){
+		������=������∗������∗������^������+������
+

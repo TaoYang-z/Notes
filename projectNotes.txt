@@ -14,11 +14,9 @@ make TEST_BLAS=../installDir/lib/libopenblas_cortexa53-r0.3.7.dev.a ARCH=ARM64 N
 查找方法：
 eg：查找当前目录下的含有GEMV_N的文件
 find . -type f | xargs grep GEMV_N
-<<<<<<< HEAD
+
 grep 递归查找 -r 因为recursive表示递归
 不在指定文件查找 --exclude *.o
-=======
->>>>>>> 5bc9448d5fe54729ae3043d7b97104b2837b28e7
 
 
 debug模式编译命令
@@ -127,5 +125,6 @@ syr	(	character	UPLO,
 	)	
 	int CNAME(BLASLONG m, FLOAT alpha_r,
 			FLOAT *x, BLASLONG incx, FLOAT *a, BLASLONG lda, FLOAT *buffer){
-		������=������∗������∗������^������+������
+		������=������∗������∗������^������+������
+
 
